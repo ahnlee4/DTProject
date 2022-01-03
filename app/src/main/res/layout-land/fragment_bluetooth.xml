@@ -11,6 +11,7 @@
             type="com.dmcs.op.model.BluetoothViewModel"/>
     </data>
     <LinearLayout
+        android:clickable="true"
         android:paddingTop="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
