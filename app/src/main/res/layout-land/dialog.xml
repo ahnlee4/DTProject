@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity"
+    tools:ignore="MissingDefaultResource">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="bluetoothmodel"
+            type="com.dmcs.op.model.BluetoothViewModel"/>
+    </data>
+    <LinearLayout
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:background="@drawable/component_background">
+        <TextView
+            android:padding="20dp"
+            android:layout_gravity="center"
+            android:textAppearance="@style/MyFontContentLarge"
+            android:gravity="center"
+            android:text="*주의*\n해당 기능을 사용 시 앱을 이용한 차량잠금 해제가 불가능 할 경우 차량조작이 불가능해집니다."
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/yes"
+                android:padding="10dp"
+                android:background="@drawable/button_background"
+                android:textAppearance="@style/MyFontContentLarge"
+                android:layout_marginRight="10dp"
+                android:text="동의"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/no"
+                android:padding="10dp"
+                android:background="@drawable/button2_background"
+                android:textAppearance="@style/MyFontContentLarge"
+                android:text="거절"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

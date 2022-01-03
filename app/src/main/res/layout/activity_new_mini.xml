@@ -39,7 +39,7 @@
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
                         android:textAppearance="@style/MyFontSubTitlePop"
-                        android:text="DT 리모컨 App"
+                        android:text="스마트 리모컨 App"
                         android:textColor="@color/colorPrimaryDark_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -365,7 +365,8 @@
                             android:id="@+id/lock_key"
                             android:gravity="center"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            tools:ignore="MissingConstraints">
                             <ImageView
                                 android:layout_marginRight="5dp"
                                 android:src="@drawable/ic_baseline_lock_24"
@@ -494,7 +495,8 @@
                                 android:id="@+id/up_key"
                                 android:layout_weight="1"
                                 android:layout_width="wrap_content"
-                                android:layout_height="0dp"/>
+                                android:layout_height="0dp"
+                                app:tint="@color/text" />
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
@@ -508,7 +510,8 @@
                                 android:id="@+id/down_key"
                                 android:layout_weight="1"
                                 android:layout_width="wrap_content"
-                                android:layout_height="0dp"/>
+                                android:layout_height="0dp"
+                                app:tint="@color/text" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
