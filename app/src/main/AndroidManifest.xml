@@ -24,6 +24,7 @@
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
         <activity
+            android:screenOrientation="sensorLandscape"
             android:launchMode="singleTop"
             android:theme="@style/SplashTheme"
             android:name=".SplashActivity"
@@ -36,20 +37,7 @@
         </activity>
 
         <activity
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTop"
-            android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
-            </intent-filter>
-            <meta-data
-                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
-                android:resource="@xml/usb_device_filter" />
-
-        </activity>
-
-        <activity
-            android:screenOrientation="reverseLandscape"
+            android:screenOrientation="sensorLandscape"
             android:hardwareAccelerated="true"
             android:launchMode="singleTop"
             android:name=".NewMiniActivity">

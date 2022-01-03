@@ -8,6 +8,22 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
     var TYPE_SWITCH3:Byte = 0x45
     var TYPE_BAUDRATE:Byte = 0x48
 
+    fun send_Remote_Start(): ByteArray? {
+        val i_array = ByteArray(3)
+        i_array[0] = 0xDE.toByte()
+        i_array[1] = 0x01.toByte()
+        i_array[2] = 0x96.toByte()
+        return serialSocket.PacketSend(*i_array, limit = 1, is_receive = false)
+    }
+
+    fun send_Remote_Key(key:Int): ByteArray? {
+        val i_array = ByteArray(3)
+        i_array[0] = 0xDE.toByte()
+        i_array[1] = 0x01.toByte()
+        i_array[2] = key.toByte()
+        return serialSocket.PacketSend(*i_array, limit = 1, is_receive = false)
+    }
+
     fun send_Version_Read(ID_NUMBER: Byte): ByteArray? {
         val i_array = ByteArray(6)
         i_array[0] = ID_NUMBER
@@ -16,7 +32,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 2)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_New_Version(): ByteArray? {
@@ -27,7 +43,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Battery_Type_Read(): ByteArray? {
@@ -38,7 +54,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Drive_Type(): ByteArray? {
@@ -49,7 +65,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Current_Type(): ByteArray? {
@@ -60,7 +76,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Parameter_Total_Count(): ByteArray? {
@@ -71,7 +87,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Parameter_safety_off_time(byte: Byte): ByteArray? {
@@ -82,7 +98,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Error_code(): ByteArray? {
@@ -93,7 +109,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Driver_Write(byte: Byte): ByteArray? {
@@ -107,7 +123,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
             i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     //디지털(Digital) 관련
@@ -119,7 +135,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Digital_Switch_Type_Read(): ByteArray? {
@@ -130,7 +146,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Digital_Switch_Write(data:Int): ByteArray? {
@@ -141,7 +157,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = (data and 0xFF).toByte()
         i_array[4] = ((data shr 8) and 0xFF).toByte()
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     //아날로그(Analog) 관련
@@ -153,7 +169,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Analog_Data(type:Int): ByteArray? {
@@ -164,7 +180,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Analog_Para_Read(type:Int): ByteArray? {
@@ -175,7 +191,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Analog_Para_Write(type:Int, data:Int): ByteArray? {
@@ -186,7 +202,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = (data and 0xFF).toByte()
         i_array[4] = ((data shr 8) and 0xFF).toByte()
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Analog_ALL_Data(max:Int): ByteArray? {
@@ -197,7 +213,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0x00.toByte()
         i_array[4] = max.toByte()
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     //오류 기록(ErrorHistory) 관련
@@ -213,7 +229,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Error_Time_High_Read(num:Byte): ByteArray? {
@@ -224,7 +240,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Error_Time_Low_Read(num:Byte): ByteArray? {
@@ -235,7 +251,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
 
@@ -247,7 +263,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Error_Read(num:Byte, option:Byte): ByteArray? {
@@ -258,7 +274,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Error_Delete(num:Int): ByteArray? {
@@ -269,7 +285,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     // 파라메터 조회/수정(Parameter Confirm) 관련
@@ -281,7 +297,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Param_Read(num:Int): ByteArray? {
@@ -292,7 +308,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Param_Min_Read(num:Int): ByteArray? {
@@ -303,7 +319,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Param_Max_Read(num:Int): ByteArray? {
@@ -314,7 +330,7 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Param_Write(num:Int, data:Int): ByteArray? {
@@ -325,6 +341,6 @@ class MINI110CANPacket(private val serialSocket: SerialSocket) {
         i_array[3] = (data and 0xFF).toByte()
         i_array[4] = ((data shr 8) and 0xFF).toByte()
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 }

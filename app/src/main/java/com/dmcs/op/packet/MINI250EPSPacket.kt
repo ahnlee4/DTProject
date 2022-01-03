@@ -13,7 +13,7 @@ class MINI250EPSPacket(private val serialSocket: SerialSocket) {
         i_array[3] = ((0x30+AppData.admin_flag).toByte())
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 2)
+        return serialSocket.PacketSend(*i_array, limit = 2, is_receive = true)
     }
 
     fun send_EPS_Version_Read(): ByteArray? {
@@ -24,7 +24,7 @@ class MINI250EPSPacket(private val serialSocket: SerialSocket) {
         i_array[3] = ((0x30+AppData.admin_flag).toByte())
         i_array[4] = 0;
         i_array[5] = 0;
-        return serialSocket.PacketSend(*i_array, limit = 2)
+        return serialSocket.PacketSend(*i_array, limit = 2, is_receive = true)
     }
 
 
@@ -40,7 +40,7 @@ class MINI250EPSPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = (key and 0xFF).toByte()
         i_array[5] = ((key shr 8) and 0xFF).toByte()
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
 
@@ -56,7 +56,7 @@ class MINI250EPSPacket(private val serialSocket: SerialSocket) {
         i_array[3] = 0
         i_array[4] = 0
         i_array[5] = 0
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 
     fun send_Memory_Read(len: Byte, key:Int): ByteArray? {
@@ -74,6 +74,6 @@ class MINI250EPSPacket(private val serialSocket: SerialSocket) {
         i_array[3] = len
         i_array[4] = (data and 0xFF).toByte()
         i_array[5] = ((data shr 8) and 0xFF).toByte()
-        return serialSocket.PacketSend(*i_array, limit = 5)
+        return serialSocket.PacketSend(*i_array, limit = 5, is_receive = true)
     }
 }

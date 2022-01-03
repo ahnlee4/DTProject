@@ -3,14 +3,9 @@ package com.dmcs.op
 import android.bluetooth.BluetoothDevice
 import android.os.Environment
 import com.dmcs.baseproject.util.ArrayQueue
-import com.dmcs.op.util.AnalogItem
-import com.dmcs.op.util.DigitalItem
-import com.dmcs.op.util.ParamItem
 import java.util.*
 
 object AppData {
-    var Temp_Current_fragment:MyFragment? = null
-    var Current_fragment:MyFragment? = null
     var ID_NUMBER:Byte = 0
     var ID_NUMBER_MINI250_FLAG = false
     var Usb_Detached = true
@@ -20,7 +15,11 @@ object AppData {
     var Connect_Type = -1
     var Reboot_flag=false
     var admin_flag:Int = 0
+    var Stop_flag = false
+    var Mode_flag = false
+    var Lock_flag = false
     var Message_flag=false
+    var log=""
 
     object Bluetooth{
         var bluetooth_name=""
@@ -85,10 +84,6 @@ object AppData {
     var EVEC_Drive_type:Byte = 0x83.toByte()
     var MPS_Drive_type:Byte = 0x84.toByte()
 
-    var Digital_Name_List = ArrayList<DigitalItem>()
-    var Analog_Name_List = ArrayList<AnalogItem>()
-    var Parameter_Map = HashMap<String, ParamItem>()
-
     object Protocol{
         var TAN_ID = 0x55.toByte()
         var SMINI20_CON_ID = 0x90.toByte()
@@ -98,6 +93,7 @@ object AppData {
         var MINICAN_CON_ID = 0x94.toByte() // CAN
         var EPSRB20_CON_ID = 0x95.toByte()
         var MINI_DT_ID = 0x56.toByte()
+        var MINI_DT_REMOTE_ID = 0xDE.toByte()
     }
 
     object Main {

@@ -14,8 +14,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.dmcs.op.AppData
-import com.dmcs.op.microchipusb.Constants
-import com.dmcs.op.microchipusb.MCP2221
+import com.dmcs.op.NewMiniActivity
 import com.hoho.android.usbserial.driver.UsbSerialPort
 import com.hoho.android.usbserial.driver.UsbSerialProber
 import com.hoho.android.usbserial.util.SerialInputOutputManager
@@ -30,16 +29,14 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
     private val withIoManager = true
     private var usbIoManager: SerialInputOutputManager? = null
     private var usbSerialPort: UsbSerialPort? = null
-    private var mcp2221:MCP2221? = null
     private var mHandler:Handler? = null
     private val mainLooper: Handler
     var receive_start: Long = 0
     var parser_start: Long = 0
     var fail_count: Int = 0
     var send_start: Long = 0
-    var Wait_time = 10000
+    var Wait_time = 3000
     var baudRate = 19200
-    var wifi: WifiUtil? = null
 
     override fun onNewData(data: ByteArray) {
         val sb = StringBuilder()
@@ -47,69 +44,32 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
             AppData.Main.arrQueue.offer(b)
             sb.append(String.format("%02x ", b))
         }
-        status("[" + sb.toString() + "=========" + (System.currentTimeMillis() - receive_start) + "ms Receive]")
+        Util.status("[" + sb.toString() + "=========" + (System.currentTimeMillis() - receive_start) + "ms Receive]")
         receive_start = System.currentTimeMillis()
     }
 
     override fun onRunError(e: Exception) {
-        status("connection lost: " + e.message)
+        Util.status("connection lost: " + e.message)
         disconnect()
     }
 
-    fun status(status: String) {
-        Log.d(SimpleDateFormat("hh:mm:ss.SSS ").format(Date()), status)
-    }
-
-    fun status_e(status: String) {
-        Log.e("Status", status)
-    }
 
     // 디바이스 = 포트 연결
     fun connect(type: Int): Boolean {
         if (!AppData.Connect) {
             if (type == 0) {
-                READ_WAIT_MILLIS = 300
                 if (connect_usb()) {
-                    status("USB 연결 성공")
+                    Util.status("USB 연결 성공")
                     socket_type = type
                     return true
                 }
             } else if (type == 1) {
-                READ_WAIT_MILLIS = 300
                 AppData.Usb_Detached = true
                 if (connect_bluetooth()) {
-                    status("블루투스 연결 성공")
+                    Util.status("블루투스 연결 성공")
                     socket_type = type
                     return true
                 }
-            } else if (type == 2) {
-                READ_WAIT_MILLIS = 300
-                if (connect_mcp2221()) {
-                    status("MCP 연결 성공")
-                    socket_type = type
-                    return true
-                }
-            } else if (type == 3) {
-                READ_WAIT_MILLIS = 300
-                wifi = WifiUtil()
-//                if (wifi!!.ConnectThread("192.168.0.108", 80)) {
-                if (wifi!!.ConnectThread("192.168.4.1", 80)) {
-                    status("WIFI 연결 성공")
-                    socket_type = type
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-    fun connect_mcp2221(): Boolean {
-        if (!AppData.Connect) {
-            mcp2221 = MCP2221(activity)
-            if (mcp2221?.open() == Constants.SUCCESS) {
-                mcp2221!!.setBaudRate(baudRate)
-                mcp2221!!.openCOM()
-                return true
             }
         }
         return false
@@ -135,16 +95,16 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
             for (v in usbManager.deviceList.values) if (v.deviceId == deviceId) device =
                 v
             if (device == null) {
-                status("connection failed: device not found")
+                Util.status("connection failed: device not found")
                 return false
             }
             val driver = UsbSerialProber.getDefaultProber().probeDevice(device)
             if (driver == null) {
-                status("connection failed: no driver for device")
+                Util.status("connection failed: no driver for device")
                 return false
             }
             if (driver.ports.size < portNum) {
-                status("connection failed: not enough ports at device")
+                Util.status("connection failed: not enough ports at device")
                 return false
             }
             usbSerialPort = driver.ports[portNum]
@@ -162,9 +122,9 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
 
             if (usbConnection == null) {
                 if (!usbManager.hasPermission(driver.device)) {
-                    Log.d("DEBUG", "connection failed: permission denied")
+                    Util.status("connection failed: permission denied")
                 } else {
-                    Log.d("DEBUG", "connection failed: open failed")
+                    Util.status("connection failed: open failed")
                 }
                 return false
             }
@@ -184,10 +144,10 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
                     usbIoManager = SerialInputOutputManager(usbSerialPort, this)
                     Executors.newSingleThreadExecutor().submit(usbIoManager)
                 }
-                status("connected")
+                Util.status("connected")
                 return true
             } catch (e: Exception) {
-                status("connection failed: " + e.message)
+                Util.status("connection failed: " + e.message)
             }
         }
         return false
@@ -195,10 +155,10 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
 
     fun connect_bluetooth(): Boolean {
         try {
-            Log.d("BluetoothFind", "찾는중...")
+            Util.status("찾는중...")
             mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             if (mBluetoothAdapter == null) {
-                Log.d("BluetoothFind", "No bluetooth adapter available")
+                Util.status("No bluetooth adapter available")
             }
 
             if (!mBluetoothAdapter!!.isEnabled()) {
@@ -210,20 +170,20 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
                 openBT()
                 return true
             }
-            status("connection failed: device not found")
+            Util.status("connection failed: device not found")
         } catch (e: Exception) {
-            status("connection failed: " + e.message)
+            Util.status("connection failed: " + e.message)
         }
         return false
     }
 
     @Throws(IOException::class)
     fun openBT() {
-        Log.d("BluetoothConnect", "여는중...")
+        Util.status("여는중...")
         mSocket =createBluetoothSocket(AppData.Bluetooth.mRemoteDevice)
         mSocket!!.connect()
         beginListenForData()
-        Log.d("BluetoothConnect", "Success")
+        Util.status("Success")
     }
 
     fun beginListenForData() {
@@ -256,7 +216,7 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
     //연결 해제
     fun detached() {
         if(AppData.Connect){
-            status("연결 종료")
+            Util.status("연결 종료")
             AppData.Connect = false
             stopWorker = true
             if (usbIoManager != null) usbIoManager!!.stop()
@@ -274,13 +234,6 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
             }
             mSocket = null
 
-            MainActivity.is_error = false
-            MainActivity.viewModel.isConnect.postValue(AppData.Connect)
-            MainActivity.viewModel.isError.postValue(MainActivity.is_error)
-            if (AppData.Current_fragment != null) {
-                AppData.Current_fragment?.Exit()
-            }
-
             serial_clear()
 
 
@@ -290,7 +243,7 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
     //통신 해제
     fun disconnect() {
         if(AppData.Connect) {
-            status("통신 종료")
+            Util.status("통신 종료")
             if (usbIoManager != null) usbIoManager!!.stop()
             usbIoManager = null
             try {
@@ -300,23 +253,14 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
             usbSerialPort = null
 
             AppData.Connect = false
-            MainActivity.is_error = false
-            MainActivity.viewModel.isConnect.postValue(AppData.Connect)
-            MainActivity.viewModel.isError.postValue(MainActivity.is_error)
-            if (AppData.Current_fragment != null) {
-                AppData.Current_fragment?.Exit()
-            }
-
+            NewMiniActivity.stopWorker = true
             serial_clear()
-            if(AppData.Connect_Type==0)
-                MainActivity.Connect(activity, 0)
         }
     }
 
     fun serial_clear(){
         AppData.ID_NUMBER = 0
         AppData.ID_NUMBER_MINI250_FLAG = false
-        AppData.Parameter_Map.clear()
 
         AppData.Main.DeviceName = ""
         AppData.Connect_Type = -1
@@ -335,7 +279,13 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
     var parser_count = 0
 
     @Synchronized
-    fun PacketSend(vararg i_array: Byte, limit: Int): ByteArray? {
+    fun PacketSend(vararg i_array: Byte, limit: Int, is_receive: Boolean): ByteArray? {
+        if(!is_receive){
+            READ_WAIT_MILLIS = 10
+        }else{
+            READ_WAIT_MILLIS = 500
+        }
+
         for(i in 0 until limit) {
             var receive = Send(*i_array)
             if (receive != null) {
@@ -371,16 +321,11 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
             } else if (socket_type == 1) {
                 mSocket!!.outputStream!!.write(send_array)
                 mSocket!!.outputStream!!.flush()
-            } else if (socket_type == 2) {
-                mcp2221!!.sendCdcData(send_array)
-            } else if (socket_type == 3) {
-                wifi!!.mOut!!.write(send_array)
-                wifi!!.mOut!!.flush()
             }
 
             val sb = StringBuilder()
             for (b in send_array) sb.append(String.format("%02x ", b))
-            status("TX : [" + sb.toString() + "=========" + (System.currentTimeMillis() - send_start) + "ms]")
+            Util.status("TX : [" + sb.toString() + "=" + (System.currentTimeMillis() - send_start) + "ms]")
             send_start = System.currentTimeMillis()
 
             parser_start = System.currentTimeMillis()
@@ -451,7 +396,7 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
                         var Rxcrc16 = String.format("%02x ", crc16.crcBytes.get(0)) + String.format("%02x ", crc16.crcBytes.get(1))
                         if (Rxcrc16_2 == Rxcrc16) {
                             parser_count = 0
-                            status("RX : [" + sb.toString() + "=========" + (System.currentTimeMillis() - parser_start) + "ms]")
+                            Util.status("RX : [" + sb.toString() + "=========" + (System.currentTimeMillis() - parser_start) + "ms]")
                             return tmp_array_copy
                         }
                     }
@@ -460,7 +405,7 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
 
             // 시간 초과
             if (System.currentTimeMillis() - start_time >= time) {
-                status_e("Rx실패 : [" + parser_sequence + "] [" + sb.toString() + "=========" + (System.currentTimeMillis() - start_time) + "ms]")
+                Util.status_e("Rx실패 : [" + parser_sequence + "] [" + sb.toString() + "=========" + (System.currentTimeMillis() - start_time) + "ms]")
                 break
             }
         }
@@ -469,7 +414,7 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
 
     companion object {
         private const val WRITE_WAIT_MILLIS = 2000
-        private var READ_WAIT_MILLIS = 300
+        private var READ_WAIT_MILLIS = 500
         var is_start = false
         var is_result = false
         var is_receive = false

@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/slide_up</item>
-        <item name="android:windowExitAnimation">@anim/slide_down</item>
-    </style>
-
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/accent</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
@@ -21,11 +16,6 @@
     <style name="MyDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
-    </style>
-
-    <style name="MyButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="colorPrimary">@color/button</item>
-        <item name="android:textColor">@color/primary_text</item>
     </style>
 
 
@@ -61,46 +51,57 @@
     </style>
 
     <!-- Font theme. -->
+    <style name="MyFontBigTitlePop">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:fontFamily">@font/samlim</item>
+    </style>
+
     <style name="MyFontBigTitle">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:fontFamily">@font/nanum_bold</item>
+        <item name="android:fontFamily">@font/samlim_out</item>
     </style>
     <style name="MyFontTitle">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">25sp</item>
-        <item name="android:fontFamily">@font/nanum_bold</item>
+        <item name="android:fontFamily">@font/samlim_out</item>
+    </style>
+    <style name="MyFontTitlePop">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:fontFamily">@font/samlim</item>
     </style>
     <style name="MyFontSubTitle">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily">@font/nanum_bold</item>
+        <item name="android:fontFamily">@font/samlim_out</item>
     </style>
     <style name="MyFontSubTitlePop">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:fontFamily">@font/one_mobile_pop</item>
+        <item name="android:fontFamily">@font/samlim</item>
     </style>
 
     <style name="MyFontContentLarge">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:fontFamily">@font/one_mobile_pop</item>
+        <item name="android:fontFamily">@font/samlim</item>
     </style>
     <style name="MyFontContentMiddle">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:fontFamily">@font/one_mobile_pop</item>
+        <item name="android:fontFamily">@font/samlim</item>
     </style>
     <style name="MyFontContentMedium">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:fontFamily">@font/one_mobile_pop</item>
+        <item name="android:fontFamily">@font/samlim</item>
     </style>
     <style name="MyFontContentSmall">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">10sp</item>
-        <item name="android:fontFamily">@font/one_mobile_pop</item>
+        <item name="android:fontFamily">@font/samlim</item>
     </style>
 
     <style name="simpletooltip_default" parent="MyFontContentLarge"></style>

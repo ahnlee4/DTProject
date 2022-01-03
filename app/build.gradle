@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         multiDexEnabled true
-        applicationId "com.dmcs.op"
+        applicationId "com.dmcs.dt_remote"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -60,6 +60,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.1.0"
     compile 'com.android.support:multidex:1.0.0'
     implementation 'com.tbuonomo:dotsindicator:4.2'
+    implementation 'com.github.angads25:toggle:1.1.0'
 
     implementation "org.apache.poi:poi:3.10-FINAL"
     implementation "org.apache.poi:poi-ooxml:3.10-FINAL"
