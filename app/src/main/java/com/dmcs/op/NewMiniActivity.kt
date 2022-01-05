@@ -12,7 +12,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.hardware.usb.UsbManager
 import android.os.Build
@@ -21,12 +20,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
@@ -57,7 +52,7 @@ class NewMiniActivity : AppCompatActivity(){
         var serialThread: Thread? = null
 
         var sub_layout_active = false
-        fun replaceContentSubFragment(fragment: MyFragment) {
+        fun replaceContentSubFragment(fragment: BluetoothFragment) {
             sub_layout_active = true
             mFragmentManager.beginTransaction().replace(R.id.sub_fragment, fragment, "MY_FRAGMENT2").commit()
             mBinding.subFragment.visibility = View.VISIBLE
@@ -262,6 +257,7 @@ class NewMiniActivity : AppCompatActivity(){
                 if(before_current_gage!=current_gage){
                     Handler(Looper.getMainLooper()).post {
                         mBinding.batteryText.text = "배터리 " + current_gage.toString() + "%"
+                        println(current_gage)
                     }
 
                     before_current_gage = current_gage
@@ -300,11 +296,13 @@ class NewMiniActivity : AppCompatActivity(){
 
                         if(brake) {
                             mBinding.stopKeyText.text = "주행"
+                            circle_connect_anim(mBinding.circle)
                             mBinding.statusBreak.text = "      정지"
                             mBinding.statusBreak.setTextColor(activity.resources.getColor(R.color.colorOn))
                             mBinding.stopKeyIcon.setImageResource(R.drawable.ic_baseline_directions_car_24)
                         }else{
                             mBinding.stopKeyText.text = "정지"
+                            circle_disconnect_anim(mBinding.circle)
                             mBinding.statusBreak.text = "      주행"
                             mBinding.statusBreak.setTextColor(activity.resources.getColor(R.color.colorAccentStroke_disconnect))
                             mBinding.stopKeyIcon.setImageResource(R.drawable.ic_baseline_do_disturb_24)
