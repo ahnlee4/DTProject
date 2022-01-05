@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator
 import android.animation.TimeAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.app.Dialog
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -21,6 +22,7 @@ import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
@@ -177,7 +179,7 @@ class NewMiniActivity : AppCompatActivity(){
                                         i_array = mMINI110CANPacket?.send_New_Version()
                                         if (i_array != null) {
                                             Handler(Looper.getMainLooper()).post{
-                                                mBinding.version.text = String.format("DT %.1f", Util.byte2short(i_array, 3) * 0.1)
+                                                mBinding.version.text = String.format("Ver %.1f", Util.byte2short(i_array, 3) * 0.1)
                                             }
                                             init = false
 
@@ -317,13 +319,13 @@ class NewMiniActivity : AppCompatActivity(){
                             mBinding.lockOnKey.isOn = true
                             mBinding.statusSmart.text = "      사용"
                             mBinding.statusSmart.setTextColor(activity.resources.getColor(R.color.colorAccentStroke_disconnect))
-                            smart_lock_flag = 0
+                            smart_lock_flag = 1
                             mBinding.stopKeyText.text = "주행"
                         }else{
                             mBinding.lockOnKey.isOn = false
                             mBinding.statusSmart.text = "  미사용"
                             mBinding.statusSmart.setTextColor(activity.resources.getColor(R.color.white))
-                            smart_lock_flag = 1
+                            smart_lock_flag = 0
                         }
                         smart_lock_check()
                         before_smart_key=smart_key
@@ -381,8 +383,8 @@ class NewMiniActivity : AppCompatActivity(){
                 smart_lock_flag = -1
                 mBinding.statusBreak.text = "      정지"
                 mBinding.statusBreak.setTextColor(mBinding.root.resources.getColor(R.color.colorOn))
-                mBinding.stopKeyIcon.setImageResource(R.drawable.ic_baseline_do_disturb_24)
-                mBinding.stopKeyText.text = "정지"
+                mBinding.stopKeyIcon.setImageResource(R.drawable.ic_baseline_directions_car_24)
+                mBinding.stopKeyText.text = "주행"
 
                 mBinding.modeKey.isEnabled = true
                 mBinding.upKey.isEnabled = true
@@ -405,6 +407,24 @@ class NewMiniActivity : AppCompatActivity(){
                 for(i in 0 until 10){
                     gages?.get(i)?.visibility = View.INVISIBLE
                 }
+
+
+                mBinding.lockKey.visibility = View.VISIBLE
+                mBinding.lockLayout.visibility = View.INVISIBLE
+
+                smart_lock_flag = -1
+
+                before_gage_stage = 0
+                current_gage_stage = 0
+                before_current_gage = -1
+                current_gage = 0
+                current_stage = 20
+
+                before_smart_key = null
+                before_brake = null
+                before_turtle = null
+                before_error_code = 0
+
 
                 circle_disconnect_anim(mBinding.circle)
                 serialThread?.interrupt()
@@ -511,10 +531,22 @@ class NewMiniActivity : AppCompatActivity(){
 //            key = 4
 //        })
 
-        mBinding.lockKey.setOnClickListener(View.OnClickListener {
-            mBinding.lockKey.visibility = View.INVISIBLE
-            mBinding.lockLayout.visibility = View.VISIBLE
 
+        mBinding.lockKey.setOnClickListener(View.OnClickListener {
+            var dialog: Dialog = Dialog(this)
+            dialog.setContentView(R.layout.dialog)
+            dialog.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent)
+            var yes = dialog.findViewById<TextView>(R.id.yes)
+            yes.setOnClickListener(View.OnClickListener {
+                mBinding.lockKey.visibility = View.INVISIBLE
+                mBinding.lockLayout.visibility = View.VISIBLE
+                dialog.dismiss()
+            })
+            var no = dialog.findViewById<TextView>(R.id.no)
+            no.setOnClickListener(View.OnClickListener {
+                dialog.dismiss()
+            })
+            dialog.show()
         })
 
         mBinding.lockLayout.setOnClickListener(View.OnClickListener {

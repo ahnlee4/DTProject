@@ -42,7 +42,7 @@
                         android:paddingTop="10dp"
                         android:paddingRight="15dp"
                         android:paddingBottom="10dp"
-                        android:text="DT 리모컨 App"
+                        android:text="스마트 리모컨 App"
                         android:textAppearance="@style/MyFontSubTitlePop"
                         android:textColor="@color/colorPrimaryDark_text" />
 
