@@ -13,4 +13,5 @@ class BluetoothViewModel (application: Application) : AndroidViewModel(applicati
     var bluetooth_list2: MutableLiveData<ArrayList<BluetoothDevice>> = MutableLiveData<ArrayList<BluetoothDevice>>()
     var info:MutableLiveData<String> = MutableLiveData<String>()
     var is_loading:MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    var is_search:MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 }

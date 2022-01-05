@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -25,6 +26,7 @@ import com.dmcs.op.adapter.BluetoothRecyclerAdapter
 import com.dmcs.op.databinding.FragmentBluetoothBinding
 import com.dmcs.op.model.BluetoothViewModel
 import com.dmcs.op.util.Util
+import kotlinx.android.synthetic.main.fragment_bluetooth.*
 
 class BluetoothFragment() : MyFragment() {
     var mBinding : FragmentBluetoothBinding? = null
@@ -64,6 +66,7 @@ class BluetoothFragment() : MyFragment() {
                             mBluetoothAdapter!!.cancelDiscovery()
                             viewModel!!.info.postValue("")
                             viewModel!!.is_loading.postValue(false)
+
                         }
                         AppData.Bluetooth.bluetooth_name = item.name
                         AppData.Bluetooth.mRemoteDevice = item
@@ -119,7 +122,6 @@ class BluetoothFragment() : MyFragment() {
                 }
 
         viewModel!!.bluetooth_list2.observe(viewLifecycleOwner, dataObserver2)
-
         mBinding!!.bluetooth.setOnClickListener(View.OnClickListener {
             var thread = Thread(Runnable {
                 find_bluetooth()
@@ -164,9 +166,8 @@ class BluetoothFragment() : MyFragment() {
             if (!mBluetoothAdapter.isDiscovering()) {
                 viewModel!!.info.postValue("찾는중..")
                 viewModel!!.is_loading.postValue(true)
-
+                viewModel!!.is_search.postValue(true)
                 AppData.Bluetooth.bluetooth_list.clear()
-
                 var start:Long = System.currentTimeMillis()
                 while(System.currentTimeMillis()-start<60000){
                     mBluetoothAdapter!!.startDiscovery()
@@ -177,6 +178,7 @@ class BluetoothFragment() : MyFragment() {
 
                 viewModel!!.info.postValue("")
                 viewModel!!.is_loading.postValue(false)
+                viewModel!!.is_search.postValue(false)
             }else{
                 mBluetoothAdapter!!.cancelDiscovery()
                 viewModel!!.info.postValue("")
