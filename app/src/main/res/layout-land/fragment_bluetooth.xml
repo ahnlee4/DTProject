@@ -35,20 +35,39 @@
                 android:id="@+id/bluetooth_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <ProgressBar
-                android:visibility="@{bluetoothmodel.is_loading()?View.VISIBLE:View.GONE}"
-                android:id="@+id/bluetooth_loading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:elegantTextHeight="true"
-                android:padding="10dp"
-                android:id="@+id/bluetooth"
-                android:text="찾기"
-                android:textColor="@color/accent"
-                android:textAppearance="@style/MyFontSubTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:elevation="20dp"
+                app:cardCornerRadius="150dp"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/component_background3"
+
+                    >
+
+                </LinearLayout>
+                <ImageView
+                    android:visibility="@{bluetoothmodel.is_search() ? View.GONE : View.VISIBLE}"
+                    android:elegantTextHeight="true"
+                    android:padding="10dp"
+                    android:id="@+id/bluetooth"
+                    android:gravity="center"
+                    android:src="@drawable/ic_baseline_search_24"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:tint="@color/white"
+                    />
+                <ProgressBar
+                    android:visibility="@{bluetoothmodel.is_loading()?View.VISIBLE:View.GONE}"
+                    android:id="@+id/bluetooth_loading"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:theme="@style/search_stryle"
+                    ></ProgressBar>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
 
         <LinearLayout
@@ -61,19 +80,34 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:elegantTextHeight="true"
-                    android:text="페어링된 디바이스"
-                    android:textAppearance="@style/MyFontContentMiddle"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <LinearLayout
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorAccentStroke_wait"
+                        >
+                    </LinearLayout>
+                    <TextView
+                        android:layout_marginLeft="12dp"
+                        android:elegantTextHeight="true"
+                        android:text="페어링된 디바이스"
+                        android:textAppearance="@style/MyFontContentMiddle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:padding="10dp"
-                    android:background="@drawable/border"
+                    android:background="@drawable/component_background2"
+
                     android:id="@+id/bluetooth_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -82,16 +116,29 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
-                <TextView
-                    android:layout_marginLeft="10dp"
-                    android:elegantTextHeight="true"
-                    android:text="검색된 디바이스"
-                    android:textAppearance="@style/MyFontContentMiddle"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <LinearLayout
+                        android:layout_marginLeft="1dp"
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorAccentStroke_wait"
+                        >
+                    </LinearLayout>
+                    <TextView
+                        android:layout_marginLeft="12dp"
+                        android:elegantTextHeight="true"
+                        android:text="검색된 디바이스"
+                        android:textAppearance="@style/MyFontContentMiddle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:padding="10dp"
-                    android:background="@drawable/border"
+                    android:background="@drawable/component_background2"
                     android:id="@+id/bluetooth_list2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

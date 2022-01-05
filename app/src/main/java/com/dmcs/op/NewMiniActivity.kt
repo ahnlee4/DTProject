@@ -5,9 +5,7 @@ import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.animation.TimeAnimator
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Dialog
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -25,7 +23,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -185,7 +182,7 @@ class NewMiniActivity : AppCompatActivity(){
                                         i_array = mMINI110CANPacket?.send_New_Version()
                                         if (i_array != null) {
                                             Handler(Looper.getMainLooper()).post{
-                                                mBinding.version.text = String.format("Ver %.1f", Util.byte2short(i_array, 3) * 0.1)
+                                                mBinding.version.text = String.format("DT %.1f", Util.byte2short(i_array, 3) * 0.1)
                                             }
                                             init = false
 
@@ -322,13 +319,13 @@ class NewMiniActivity : AppCompatActivity(){
                             mBinding.lockOnKey.isOn = true
                             mBinding.statusSmart.text = "      사용"
                             mBinding.statusSmart.setTextColor(activity.resources.getColor(R.color.colorAccentStroke_disconnect))
-                            smart_lock_flag = 1
+                            smart_lock_flag = 0
                             mBinding.stopKeyText.text = "주행"
                         }else{
                             mBinding.lockOnKey.isOn = false
                             mBinding.statusSmart.text = "  미사용"
                             mBinding.statusSmart.setTextColor(activity.resources.getColor(R.color.white))
-                            smart_lock_flag = 0
+                            smart_lock_flag = 1
                         }
                         smart_lock_check()
                         before_smart_key=smart_key
@@ -407,23 +404,6 @@ class NewMiniActivity : AppCompatActivity(){
                 mBinding.batteryText.text = "배터리"
                 mBinding.error.text = ""
                 mBinding.speed.text = "0.0 [%]"
-
-                mBinding.lockKey.visibility = View.VISIBLE
-                mBinding.lockLayout.visibility = View.INVISIBLE
-
-                smart_lock_flag = -1
-
-                before_gage_stage = 0
-                current_gage_stage = 0
-                before_current_gage = -1
-                current_gage = 0
-                current_stage = 20
-
-                before_smart_key = null
-                before_brake = null
-                before_turtle = null
-                before_error_code = 0
-
                 for(i in 0 until 10){
                     gages?.get(i)?.visibility = View.INVISIBLE
                 }
@@ -464,7 +444,6 @@ class NewMiniActivity : AppCompatActivity(){
         serialThread!!.interrupt()
     }
 
-    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_mini)
@@ -522,28 +501,28 @@ class NewMiniActivity : AppCompatActivity(){
             return@OnTouchListener true
         })
 
+//        mBinding.upKey.setOnClickListener(View.OnClickListener {
+//            Thread(Runnable { mMINI110CANPacket?.send_Remote_Key(0x03) }).start()
+//            Util.status_log("UP")
+//            key = 3
+//        })
+//
+//        mBinding.downKey.setOnClickListener(View.OnClickListener {
+//            Thread(Runnable { mMINI110CANPacket?.send_Remote_Key(0x04) }).start()
+//            Util.status_log("DOWN")
+//            key = 4
+//        })
+
         mBinding.lockKey.setOnClickListener(View.OnClickListener {
-            var dialog:Dialog = Dialog(this)
-            dialog.setContentView(R.layout.dialog)
-            dialog.getWindow()?.setBackgroundDrawableResource(android.R.color.transparent)
-            var yes = dialog.findViewById<TextView>(R.id.yes)
-            yes.setOnClickListener(View.OnClickListener {
-                mBinding.lockKey.visibility = View.INVISIBLE
-                mBinding.lockLayout.visibility = View.VISIBLE
-                dialog.dismiss()
-            })
-            var no = dialog.findViewById<TextView>(R.id.no)
-            no.setOnClickListener(View.OnClickListener {
-                dialog.dismiss()
-            })
-            dialog.show()
+            mBinding.lockKey.visibility = View.INVISIBLE
+            mBinding.lockLayout.visibility = View.VISIBLE
+
         })
 
         mBinding.lockLayout.setOnClickListener(View.OnClickListener {
             mBinding.lockKey.visibility = View.VISIBLE
             mBinding.lockLayout.visibility = View.INVISIBLE
         })
-
         mBinding.lockOnKey.setOnClickListener(View.OnClickListener {
             Thread(Runnable { mMINI110CANPacket?.send_Remote_Key(0x05) }).start()
             Util.status_log("LOCK")

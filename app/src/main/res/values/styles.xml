@@ -60,7 +60,7 @@
     <style name="MyFontBigTitle">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:fontFamily">@font/samlim_out</item>
+        <item name="android:fontFamily">@font/samlim</item>
     </style>
     <style name="MyFontTitle">
         <item name="android:textColor">@color/primary_text</item>
@@ -102,6 +102,10 @@
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">10sp</item>
         <item name="android:fontFamily">@font/samlim</item>
+    </style>
+
+    <style name="search_stryle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/white</item>
     </style>
 
     <style name="simpletooltip_default" parent="MyFontContentLarge"></style>

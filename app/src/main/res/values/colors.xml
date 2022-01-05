@@ -4,8 +4,14 @@
     <color name="colorPrimaryDark">#DD242331</color>
     <color name="colorPrimary25">#772F4F4F</color>
     <color name="colorPrimaryLight">#4B5061</color>
-    <color name="colorPrimaryLight2">#9662829C</color>
-    <color name="colorPrimaryLight3">#9662829C</color>
+<!--    <color name="colorPrimaryLight2">#9662829C</color>-->
+
+    <color name="colorPrimaryLight2">#4D585EDE</color>
+    <color name="colorPrimaryLight3">#4D585EDE</color>
+    <color name="colorborderLight1">#5FC5F3</color>
+    <color name="colorborderLight2">#85DFFB</color>
+
+    <!--    <color name="colorPrimaryLight3">#9662829C</color>-->
     <color name="colorDisable">#8D8D8D</color>
     <color name="colorOn">#DC526C</color>
     <color name="colorOn2">#FF5A10</color>
@@ -53,4 +59,5 @@
     <color name="teal_700">#00c8ff</color>
     <color name="teal">#00ff62</color>
 
+    <color name="defaultcolor">#0085DFFB</color>
 </resources>
