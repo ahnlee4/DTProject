@@ -322,13 +322,13 @@ class NewMiniActivity : AppCompatActivity(){
                             mBinding.lockOnKey.isOn = true
                             mBinding.statusSmart.text = "      사용"
                             mBinding.statusSmart.setTextColor(activity.resources.getColor(R.color.colorAccentStroke_disconnect))
-                            smart_lock_flag = 0
+                            smart_lock_flag = 1
                             mBinding.stopKeyText.text = "주행"
                         }else{
                             mBinding.lockOnKey.isOn = false
                             mBinding.statusSmart.text = "  미사용"
                             mBinding.statusSmart.setTextColor(activity.resources.getColor(R.color.white))
-                            smart_lock_flag = 1
+                            smart_lock_flag = 0
                         }
                         smart_lock_check()
                         before_smart_key=smart_key
