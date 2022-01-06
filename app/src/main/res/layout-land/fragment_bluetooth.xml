@@ -13,6 +13,7 @@
     <LinearLayout
         android:clickable="true"
         android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:orientation="vertical"
@@ -35,39 +36,28 @@
                 android:id="@+id/bluetooth_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <androidx.cardview.widget.CardView
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:elevation="20dp"
-                app:cardCornerRadius="150dp"
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/component_background3"
-
-                    >
-
-                </LinearLayout>
                 <ImageView
                     android:visibility="@{bluetoothmodel.is_search() ? View.GONE : View.VISIBLE}"
                     android:elegantTextHeight="true"
-                    android:padding="10dp"
                     android:id="@+id/bluetooth"
                     android:gravity="center"
                     android:src="@drawable/ic_baseline_search_24"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     app:tint="@color/white"
                     />
                 <ProgressBar
                     android:visibility="@{bluetoothmodel.is_loading()?View.VISIBLE:View.GONE}"
                     android:id="@+id/bluetooth_loading"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:theme="@style/search_stryle"
                     ></ProgressBar>
-            </androidx.cardview.widget.CardView>
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -81,12 +71,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <LinearLayout
+                    android:layout_marginBottom="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
                     <LinearLayout
-                        android:layout_marginLeft="1dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_width="2dp"
                         android:layout_height="match_parent"
                         android:background="@color/colorAccentStroke_wait"
@@ -117,12 +108,13 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
                 <LinearLayout
+                    android:layout_marginBottom="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
                     <LinearLayout
-                        android:layout_marginLeft="1dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_width="2dp"
                         android:layout_height="match_parent"
                         android:background="@color/colorAccentStroke_wait"

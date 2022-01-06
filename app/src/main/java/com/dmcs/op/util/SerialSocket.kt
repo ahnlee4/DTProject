@@ -294,7 +294,7 @@ class SerialSocket(private val activity: Activity) : SerialInputOutputManager.Li
             }
         }
 
-        if(AppData.Connect && !AppData.disconnect_flag && System.currentTimeMillis()-AppData.disconnect_time>Wait_time) {
+        if(is_receive) {
             AppData.disconnect_flag = true
             if(!AppData.Usb_Detached){
                 disconnect()

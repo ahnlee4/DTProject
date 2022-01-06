@@ -294,4 +294,44 @@ object Util {
     }
 
     var bar: Snackbar? = null
+
+    @Synchronized
+    fun snack_error_show(view: View, message: String) {
+        var temp: Snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+        temp.setAction("닫기", View.OnClickListener { temp.dismiss() })
+        temp.setActionTextColor(Color.parseColor("#44DB6F"))
+        temp.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+        temp.view.backgroundTintList = ColorStateList.valueOf((Color.parseColor("#CCDB4455")))
+        temp.view.findViewById<TextView>(R.id.snackbar_text).setTextColor(Color.parseColor("#FFFFFF"))
+        temp.view.findViewById<TextView>(R.id.snackbar_text).setTypeface(ResourcesCompat.getFont(view.context.getApplicationContext(), R.font.one_mobile_pop))
+        temp.view.findViewById<TextView>(R.id.snackbar_action).setTypeface(ResourcesCompat.getFont(view.context.getApplicationContext(), R.font.one_mobile_pop))
+        temp.view.findViewById<TextView>(R.id.snackbar_text).setMaxLines(20)
+        temp.setAnchorView(view)
+
+        snack_dismiss()
+        bar = temp
+        temp.show()
+    }
+
+    @Synchronized
+    fun snack_show(view: View, message: String) {
+        var temp: Snackbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+        temp.setAction("닫기", View.OnClickListener { temp.dismiss() })
+        temp.setActionTextColor(Color.parseColor("#44DB6F"))
+        temp.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+        temp.view.backgroundTintList = ColorStateList.valueOf((Color.parseColor("#CC2D2D2D")))
+        temp.view.findViewById<TextView>(R.id.snackbar_text).setTextColor(Color.parseColor("#FFFFFF"))
+        temp.view.findViewById<TextView>(R.id.snackbar_text).setTypeface(ResourcesCompat.getFont(view.context.getApplicationContext(), R.font.one_mobile_pop))
+        temp.view.findViewById<TextView>(R.id.snackbar_action).setTypeface(ResourcesCompat.getFont(view.context.getApplicationContext(), R.font.one_mobile_pop))
+        temp.view.findViewById<TextView>(R.id.snackbar_text).setMaxLines(30)
+        temp.setAnchorView(view)
+
+        snack_dismiss()
+        bar = temp
+        temp.show()
+    }
+
+    fun snack_dismiss() {
+        bar?.dismiss()
+    }
 }

@@ -7,11 +7,9 @@ import android.animation.TimeAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.Dialog
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.drawable.GradientDrawable
 import android.hardware.usb.UsbManager
@@ -66,6 +64,7 @@ class NewMiniActivity : AppCompatActivity(){
 
         var connect_wait = 0
         var is_running = false
+        var is_auto_pairing = true
         fun Connect(mActivity: Activity, type: Int) {
             var thread = Thread(Runnable {
                 try {
@@ -191,6 +190,9 @@ class NewMiniActivity : AppCompatActivity(){
                                                 mBinding.version.text = "데이터 없음"
                                             }
                                         }
+                                    }else{
+                                        Util.snack_error_show(mBinding.root, "지원하지 않는 제품입니다.")
+                                        disconnect(activity)
                                     }
                                 }
                             }else{
@@ -207,18 +209,13 @@ class NewMiniActivity : AppCompatActivity(){
                 }catch (e: java.lang.Exception){
                     e.printStackTrace()
                 }
-                disconnect()
+                disconnect(activity)
             }
         }
 
         var cnt:Int = 0
 
-        var before_gage_stage = 0
-        var current_gage_stage = 0
-        var before_current_gage = -1
-        var current_gage = 0
         var current_stage = 20
-        var gages:Array<ImageView>? = null
 
         var before_smart_key:Boolean? = null
         var before_brake:Boolean? = null
@@ -251,34 +248,6 @@ class NewMiniActivity : AppCompatActivity(){
                         mBinding.lockKey.isEnabled = true
                     }else{
                         mBinding.lockKey.isEnabled = false
-                    }
-                }
-
-                // battery
-                current_gage = Util.byte2short(i_array, 3) / 10
-                if(before_current_gage!=current_gage){
-                    Handler(Looper.getMainLooper()).post {
-                        mBinding.batteryText.text = "배터리 " + current_gage.toString() + "%"
-                        println(current_gage)
-                    }
-
-                    before_current_gage = current_gage
-
-                    current_gage_stage = current_gage / 10
-                    if(before_gage_stage>current_gage_stage){
-                        for(i in before_gage_stage until current_gage_stage){
-                            Handler(Looper.getMainLooper()).post(Runnable {
-                                gages?.get(i)?.visibility = View.INVISIBLE
-                            })
-                        }
-                        before_gage_stage = current_gage_stage
-                    }else if(before_gage_stage<current_gage_stage){
-                        for(i in before_gage_stage until current_gage_stage){
-                            Handler(Looper.getMainLooper()).post(Runnable {
-                                gages?.get(i)?.visibility = View.VISIBLE
-                            })
-                        }
-                        before_gage_stage = current_gage_stage
                     }
                 }
 
@@ -381,10 +350,10 @@ class NewMiniActivity : AppCompatActivity(){
                 mBinding.downKey.isEnabled = false
             }else if(smart_lock_flag==0){
                 smart_lock_flag = -1
-                mBinding.statusBreak.text = "      정지"
+                mBinding.statusBreak.text = "      주행"
                 mBinding.statusBreak.setTextColor(mBinding.root.resources.getColor(R.color.colorOn))
-                mBinding.stopKeyIcon.setImageResource(R.drawable.ic_baseline_directions_car_24)
-                mBinding.stopKeyText.text = "주행"
+                mBinding.stopKeyIcon.setImageResource(R.drawable.ic_baseline_do_disturb_24)
+                mBinding.stopKeyText.text = "정지"
 
                 mBinding.modeKey.isEnabled = true
                 mBinding.upKey.isEnabled = true
@@ -392,7 +361,7 @@ class NewMiniActivity : AppCompatActivity(){
             }
         }
 
-        fun disconnect(){
+        fun disconnect(activity: Activity){
             Handler(Looper.getMainLooper()).post{
                 hide_object()
                 connect_wait = 2000
@@ -401,12 +370,8 @@ class NewMiniActivity : AppCompatActivity(){
                 mBinding.connectKey.text = "연결"
                 mBinding.status.visibility = View.INVISIBLE
                 mBinding.connectKey.visibility = View.VISIBLE
-                mBinding.batteryText.text = "배터리"
                 mBinding.error.text = ""
                 mBinding.speed.text = "0.0 [%]"
-                for(i in 0 until 10){
-                    gages?.get(i)?.visibility = View.INVISIBLE
-                }
 
 
                 mBinding.lockKey.visibility = View.VISIBLE
@@ -414,10 +379,6 @@ class NewMiniActivity : AppCompatActivity(){
 
                 smart_lock_flag = -1
 
-                before_gage_stage = 0
-                current_gage_stage = 0
-                before_current_gage = -1
-                current_gage = 0
                 current_stage = 20
 
                 before_smart_key = null
@@ -429,30 +390,79 @@ class NewMiniActivity : AppCompatActivity(){
                 circle_disconnect_anim(mBinding.circle)
                 serialThread?.interrupt()
             }
+            auto_pairing(activity)
         }
 
         fun show_object(){
             Handler(Looper.getMainLooper()).post {
                 mBinding.version.animate().translationX(0f).start()
                 mBinding.error.animate().translationX(0f).start()
-                mBinding.batteryLayout.animate().translationX(0f).start()
                 mBinding.stopKeyLayout.animate().translationX(0f).start()
                 mBinding.modeKey.animate().translationX(0f).start()
                 mBinding.smartLayout.animate().translationX(0f).start()
                 mBinding.speedLayout.animate().translationX(0f).start()
-
             }
         }
         fun hide_object(){
             Handler(Looper.getMainLooper()).post {
                 mBinding.version.animate().translationX(-1000f).start()
                 mBinding.error.animate().translationX(-1000f).start()
-                mBinding.batteryLayout.animate().translationX(-1000f).start()
                 mBinding.stopKeyLayout.animate().translationX(-1000f).start()
                 mBinding.modeKey.animate().translationX(-1000f).start()
                 mBinding.smartLayout.animate().translationX(1000f).start()
                 mBinding.speedLayout.animate().translationX(1000f).start()
             }
+        }
+
+        fun auto_pairing(activity: Activity){
+            Thread(Runnable {
+                viewModel!!.is_auto.postValue(true)
+                Handler(Looper.getMainLooper()).post {
+                    mBinding.autoLayout.animate().translationX(0f).start()
+                }
+
+                if(is_auto_pairing){
+                    Handler(Looper.getMainLooper()).post {
+                        mBinding.auto.text = "2초 후 자동연결"
+                    }
+                    Thread.sleep(1000)
+                    Handler(Looper.getMainLooper()).post {
+                        mBinding.auto.text = "1초 후 자동연결"
+                    }
+                    Thread.sleep(1000)
+
+                    while(!AppData.Connect && is_auto_pairing){
+                        if(!is_running){
+
+
+                            var sp: SharedPreferences = activity.getPreferences(Context.MODE_PRIVATE)
+                            var auto_bluetooth = sp.getString("auto_bluetooth", "")
+
+                            var mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+                            val pairedDevices: Set<BluetoothDevice> = mBluetoothAdapter!!.getBondedDevices()
+                            if (pairedDevices.size > 0) {
+                                for (device in pairedDevices) {
+                                    if(auto_bluetooth==device.address){
+                                        AppData.Bluetooth.bluetooth_name = device.name
+                                        AppData.Bluetooth.mRemoteDevice = device
+
+                                        Handler(Looper.getMainLooper()).post {
+                                            mBinding.auto.text = "ID : "+device.name
+                                        }
+
+                                        Connect(activity, 1)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    viewModel!!.is_auto.postValue(false)
+                }
+
+                Handler(Looper.getMainLooper()).post {
+                    mBinding.autoLayout.animate().translationX(-1000f).start()
+                }
+            }).start()
         }
     }
 
@@ -474,10 +484,6 @@ class NewMiniActivity : AppCompatActivity(){
 
         mFragmentManager = supportFragmentManager
         circle_disconnect_anim(mBinding.circle)
-        gages = arrayOf(
-            mBinding.battery0, mBinding.battery1, mBinding.battery2, mBinding.battery3, mBinding.battery4, mBinding.battery5, mBinding.battery6,
-            mBinding.battery7, mBinding.battery8, mBinding.battery9
-        )
 
         serial_socket = SerialSocket(this)
         mMINI250EPSPacket = MINI250EPSPacket(serial_socket!!)
@@ -561,21 +567,27 @@ class NewMiniActivity : AppCompatActivity(){
 
         mBinding.status.setOnLongClickListener(View.OnLongClickListener{
             Util.status_log("DISCONNECT")
-            disconnect()
+            disconnect(this)
             return@OnLongClickListener true
         })
         mBinding.connectKey.setOnClickListener(View.OnClickListener {
             if (!is_running) {
                 if (AppData.Connect) {
                     Util.status_log("DISCONNECT")
-                    disconnect()
+                    disconnect(this)
                 } else {
                     replaceContentSubFragment(BluetoothFragment())
                 }
             }
         })
 
+        mBinding.autoClose.setOnClickListener(View.OnClickListener {
+            is_auto_pairing=false
+            mBinding.autoLayout.animate().translationX(-1000f).start()
+        })
+
         hide_object()
+        auto_pairing(this)
     }
 
     override fun onResume() {
@@ -590,7 +602,9 @@ class NewMiniActivity : AppCompatActivity(){
                             return
                         }
                     }
-                    AppData.Bluetooth.bluetooth_list.add(device!!)
+                    if(device?.name != null && device?.name != "") {
+                        AppData.Bluetooth.bluetooth_list.add(device!!)
+                    }
                 }
             }
         }
@@ -625,8 +639,12 @@ class NewMiniActivity : AppCompatActivity(){
     }
 
     var permission_list = arrayOf(
+        Manifest.permission.INTERNET,
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
         Manifest.permission.BLUETOOTH,
         Manifest.permission.BLUETOOTH_ADMIN,
+        Manifest.permission.BLUETOOTH_PRIVILEGED,
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_PHONE_STATE,
@@ -688,4 +706,6 @@ class NewMiniActivity : AppCompatActivity(){
             }
         }
     }
+
+
 }

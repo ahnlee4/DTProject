@@ -20,9 +20,6 @@
         android:requestLegacyExternalStorage="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".SplashActivity2"
-            android:exported="false" />
 
         <uses-library
             android:name="org.apache.http.legacy"

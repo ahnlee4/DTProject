@@ -14,6 +14,7 @@ class BluetoothRecyclerAdapter(var data: MutableLiveData<ArrayList<BluetoothDevi
 
     inner class MyViewHolder constructor(parent: ViewGroup) : RecyclerView.ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_blue_item, parent, false)) {
         var tv1 = itemView.text1
+        var iv1 = itemView.item1
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -33,6 +34,10 @@ class BluetoothRecyclerAdapter(var data: MutableLiveData<ArrayList<BluetoothDevi
         data.value!!.get(safePosition).let { item ->
             with(holder) {
                 tv1.text = item.name
+
+                if(row==safePosition){
+                    iv1.text = "선택됨"
+                }
 
                 itemView.setOnClickListener{
                     itemClick.invoke(safePosition, item)

@@ -6,5 +6,5 @@ import androidx.lifecycle.MutableLiveData
 import com.dmcs.op.R
 
 class NewMiniViewModel (application: Application) : AndroidViewModel(application){
-    var op_list = MutableLiveData<ArrayList<String>>()
+    var is_auto = MutableLiveData<Boolean>()
 }

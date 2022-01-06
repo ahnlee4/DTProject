@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?android:attr/selectableItemBackground"
-    android:id="@+id/text1"
-    android:elegantTextHeight="true"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="@color/white"
-    android:textAppearance="@style/MyFontContentLarge"
-    android:gravity="center_vertical"
+    android:background="?android:attr/selectableItemBackground"
     android:paddingStart="?android:attr/listPreferredItemPaddingStart"
     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    tools:ignore="MissingDefaultResource" />
+    tools:ignore="MissingDefaultResource"
+    >
+    <TextView
+        android:id="@+id/text1"
+        android:elegantTextHeight="true"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textAppearance="@style/MyFontContentLarge"
+        android:gravity="center_vertical"/>
+    <TextView
+        android:id="@+id/item1"
+        android:elegantTextHeight="true"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorDisable"
+        android:textAppearance="@style/MyFontContentMiddle"
+        android:gravity="center_vertical"/>
+</LinearLayout>

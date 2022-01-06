@@ -58,27 +58,32 @@ class BluetoothFragment() : MyFragment() {
         mBinding!!.bluetoothList.layoutManager = LinearLayoutManager(activity)
         mBinding!!.bluetoothList2.layoutManager = LinearLayoutManager(activity)
 
+        var sp:SharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE)
+        var auto_bluetooth = sp.getString("auto_bluetooth", "")
+
+        var newAdapter = BluetoothRecyclerAdapter(data) { pos, item ->
+            if (mBluetoothAdapter.isDiscovering()) {
+                mBluetoothAdapter!!.cancelDiscovery()
+                viewModel!!.info.postValue("")
+                viewModel!!.is_loading.postValue(false)
+
+            }
+
+            AppData.Bluetooth.bluetooth_name = item.name
+            AppData.Bluetooth.mRemoteDevice = item
+
+            Handler(Looper.getMainLooper()).post {
+                NewMiniActivity.sub_layout_active = false
+                NewMiniActivity.mBinding.subFragment.visibility = View.GONE
+            }
+
+            sp.edit().putString("auto_bluetooth", item.address).commit()
+            NewMiniActivity.Connect(requireActivity(), 1)
+        }
+
         val dataObserver: Observer<ArrayList<BluetoothDevice>> =
                 Observer { livedata ->
                     data.value = livedata
-                    var newAdapter = BluetoothRecyclerAdapter(data) { pos, item ->
-                        if (mBluetoothAdapter.isDiscovering()) {
-                            mBluetoothAdapter!!.cancelDiscovery()
-                            viewModel!!.info.postValue("")
-                            viewModel!!.is_loading.postValue(false)
-
-                        }
-                        AppData.Bluetooth.bluetooth_name = item.name
-                        AppData.Bluetooth.mRemoteDevice = item
-
-                        Handler(Looper.getMainLooper()).post {
-                            NewMiniActivity.sub_layout_active = false
-                            NewMiniActivity.mBinding.subFragment.visibility = View.GONE
-                        }
-
-                        NewMiniActivity.Connect(requireActivity(), 1)
-
-                    }
                     mBinding!!.bluetoothList.adapter = newAdapter
                 }
 
@@ -102,6 +107,8 @@ class BluetoothFragment() : MyFragment() {
                                     AppData.Bluetooth.mRemoteDevice!!.setPin(pinBytes)
                                     if(AppData.Bluetooth.mRemoteDevice!!.createBond()){
                                         if(activity!=null) {
+                                            sp.edit().putString("auto_bluetooth", item.address).commit()
+
                                             NewMiniActivity.Connect(requireActivity(), 1)
 
                                             Handler(Looper.getMainLooper()).post {
@@ -141,13 +148,20 @@ class BluetoothFragment() : MyFragment() {
             startActivityForResult(enableBluetooth, 0)
         }
 
+
         val pairedDevices: Set<BluetoothDevice> = mBluetoothAdapter!!.getBondedDevices()
         if (pairedDevices.size > 0) {
             for (device in pairedDevices) {
+                if(auto_bluetooth==device.address){
+                    newAdapter.row=AppData.Bluetooth.pairing_list.size
+                    newAdapter.notifyDataSetChanged()
+                }
+
                 AppData.Bluetooth.pairing_list.add(device)
-                viewModel!!.bluetooth_list.postValue(ArrayList(AppData.Bluetooth.pairing_list))
             }
+            viewModel!!.bluetooth_list.postValue(ArrayList(AppData.Bluetooth.pairing_list))
         }
+
         return mBinding!!.root
     }
 

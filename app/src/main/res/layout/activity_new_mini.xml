@@ -52,18 +52,53 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/version"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/component_background"
-                            android:paddingLeft="15dp"
-                            android:paddingTop="10dp"
-                            android:paddingRight="15dp"
-                            android:paddingBottom="10dp"
-                            android:text="버전"
-                            android:textAppearance="@style/MyFontSubTitlePop"
-                            android:textColor="@color/colorborderLight2" />
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:background="@drawable/component_background"
+                                android:id="@+id/auto_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:paddingTop="5dp"
+                                    android:paddingBottom="5dp"
+                                    android:paddingLeft="10dp"
+                                    android:paddingRight="10dp"
+                                    android:layout_weight="1"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/auto"
+                                    android:text="버전"
+                                    android:textAppearance="@style/MyFontSubTitlePop"
+                                    android:textColor="@color/colorborderLight2" />
+                                <LinearLayout
+                                    android:background="@color/colorStroke"
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"/>
+                                <ImageView
+                                    android:id="@+id/auto_close"
+                                    android:src="@drawable/ic_baseline_close_24"
+                                    android:layout_width="36dp"
+                                    android:layout_height="match_parent"/>
+                            </LinearLayout>
+
+                            <TextView
+                                android:paddingLeft="15dp"
+                                android:paddingTop="10dp"
+                                android:paddingRight="15dp"
+                                android:paddingBottom="10dp"
+                                android:id="@+id/version"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/component_background"
+                                android:text="버전"
+                                android:textAppearance="@style/MyFontSubTitlePop"
+                                android:textColor="@color/colorborderLight2" />
+                        </RelativeLayout>
+
+
 
                         <TextView
                             android:id="@+id/error"
@@ -86,134 +121,6 @@
                             android:layout_weight="1"
                             android:orientation="vertical">
 
-                            <LinearLayout
-                                android:id="@+id/battery_layout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/component_background"
-                                android:orientation="vertical"
-                                android:paddingLeft="15dp"
-                                android:paddingTop="10dp"
-                                android:paddingRight="15dp"
-                                android:paddingBottom="10dp">
-
-                                <TextView
-                                    android:id="@+id/battery_text"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingBottom="5dp"
-                                    android:text="배터리"
-                                    android:textAppearance="@style/MyFontSubTitlePop"
-                                    android:textColor="@color/colorborderLight2" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="36dp"
-                                    android:background="@drawable/battery_border3"
-                                    android:orientation="horizontal"
-                                    android:padding="5dp">
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/battery_0"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="1dp"
-                                        android:layout_weight="1"
-                                        android:scaleType="matrix"
-                                        android:src="@drawable/battery3"
-                                        android:visibility="invisible" />
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/battery_1"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="1dp"
-                                        android:layout_weight="1"
-                                        android:scaleType="matrix"
-                                        android:src="@drawable/battery3"
-                                        android:visibility="invisible" />
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/battery_2"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="1dp"
-                                        android:layout_weight="1"
-                                        android:scaleType="matrix"
-                                        android:src="@drawable/battery3"
-                                        android:visibility="invisible" />
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/battery_3"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="1dp"
-                                        android:layout_weight="1"
-                                        android:scaleType="matrix"
-                                        android:src="@drawable/battery3"
-                                        android:visibility="invisible" />
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/battery_4"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="1dp"
-                                        android:layout_weight="1"
-                                        android:scaleType="matrix"
-                                        android:src="@drawable/battery3"
-                                        android:visibility="invisible" />
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/battery_5"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="1dp"
-                                        android:layout_weight="1"
-                                        android:scaleType="matrix"
-                                        android:src="@drawable/battery3"
-                                        android:visibility="invisible" />
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/battery_6"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="1dp"
-                                        android:layout_weight="1"
-                                        android:scaleType="matrix"
-                                        android:src="@drawable/battery3"
-                                        android:visibility="invisible" />
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/battery_7"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="1dp"
-                                        android:layout_weight="1"
-                                        android:scaleType="matrix"
-                                        android:src="@drawable/battery3"
-                                        android:visibility="invisible" />
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/battery_8"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="1dp"
-                                        android:layout_weight="1"
-                                        android:scaleType="matrix"
-                                        android:src="@drawable/battery3"
-                                        android:visibility="invisible" />
-
-                                    <androidx.appcompat.widget.AppCompatImageView
-                                        android:id="@+id/battery_9"
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_margin="1dp"
-                                        android:layout_weight="1"
-                                        android:scaleType="matrix"
-                                        android:src="@drawable/battery3"
-                                        android:visibility="invisible" />
-                                </LinearLayout>
-                            </LinearLayout>
                         </LinearLayout>
 
                     </LinearLayout>
